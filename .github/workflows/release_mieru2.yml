@@ -1,4 +1,4 @@
-name: Mieru Plugin Release Build
+name: Mieru 2 Plugin Release Build
 on:
   workflow_dispatch:
     inputs:
@@ -30,29 +30,29 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Fetch Status
-        run: git submodule status 'plugin/mieru/*' > mieru_status
-      - name: Mieru Cache
+        run: git submodule status 'plugin/mieru2/*' > mieru2_status
+      - name: Mieru 2 Cache
         id: cache
         uses: actions/cache@v3
         with:
           path: |
-            plugin/mieru/src/main/jniLibs
-          key: ${{ hashFiles('.github/workflows/*', 'bin/lib/mieru/*', 'mieru_status') }}
+            plugin/mieru2/src/main/jniLibs
+          key: ${{ hashFiles('.github/workflows/*', 'bin/lib/mieru2/*', 'mieru2_status') }}
       - name: Gradle cache
         uses: actions/cache@v3
         with:
           path: ~/.gradle
           key: gradle-${{ hashFiles('**/*.gradle.kts') }}
       - name: Install Golang
-        uses: actions/setup-go@v3
+        uses: actions/setup-go@v4
         if: steps.cache.outputs.cache-hit != 'true'
         with:
-          go-version: 1.20.7
+          go-version: 1.21.2
       - name: Native Build
         if: steps.cache.outputs.cache-hit != 'true'
-        run: ./run plugin mieru
+        run: ./run plugin mieru2
   build:
     name: Gradle Build
     runs-on: ubuntu-latest
@@ -61,15 +61,15 @@ jobs:
       - check
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Fetch Status
-        run: git submodule status 'plugin/mieru/*' > mieru_status
-      - name: Mieru Cache
+        run: git submodule status 'plugin/mieru2/*' > mieru2_status
+      - name: Mieru 2 Cache
         uses: actions/cache@v3
         with:
           path: |
-            plugin/mieru/src/main/jniLibs
-          key: ${{ hashFiles('.github/workflows/*', 'bin/lib/mieru/*', 'mieru_status') }}
+            plugin/mieru2/src/main/jniLibs
+          key: ${{ hashFiles('.github/workflows/*', 'bin/lib/mieru2/*', 'mieru2_status') }}
       - name: Gradle cache
         uses: actions/cache@v3
         with:
@@ -78,14 +78,14 @@ jobs:
       - name: Release Build
         env:
           SKIP_BUILD: on
-          BUILD_PLUGIN: mieru
+          BUILD_PLUGIN: mieru2
         run: |
           echo "sdk.dir=${ANDROID_HOME}" > local.properties
-          echo "ndk.dir=${ANDROID_HOME}/ndk/25.0.8775105" >> local.properties
+          echo "ndk.dir=${ANDROID_HOME}/ndk/25.2.9519653" >> local.properties
           export LOCAL_PROPERTIES="${{ secrets.LOCAL_PROPERTIES }}"
           ./run init action library
-          ./gradlew :plugin:mieru:assembleOssRelease
-          APK=$(find plugin/mieru/build/outputs/apk -name '*arm64-v8a*.apk')
+          ./gradlew :plugin:mieru2:assembleOssRelease
+          APK=$(find plugin/mieru2/build/outputs/apk -name '*arm64-v8a*.apk')
           APK=$(dirname "$APK")
           echo "APK=$APK" >> $GITHUB_ENV
       - uses: actions/upload-artifact@v3
@@ -115,7 +115,7 @@ jobs:
     needs: build
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Donwload Artifacts
         uses: actions/download-artifact@v3
         with:
@@ -123,7 +123,7 @@ jobs:
           path: artifacts
       - name: Release
         run: |
-          wget -O ghr.tar.gz https://github.com/tcnksm/ghr/releases/download/v0.13.0/ghr_v0.13.0_linux_amd64.tar.gz
+          wget -O ghr.tar.gz https://github.com/tcnksm/ghr/releases/download/v0.16.0/ghr_v0.16.0_linux_amd64.tar.gz
           tar -xvf ghr.tar.gz
           mv ghr*linux_amd64/ghr .
           mkdir apks
@@ -169,15 +169,15 @@ jobs:
       - check
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Fetch Status
-        run: git submodule status 'plugin/mieru/*' > mieru_status
-      - name: Mieru Cache
+        run: git submodule status 'plugin/mieru2/*' > mieru2_status
+      - name: Mieru 2 Cache
         uses: actions/cache@v3
         with:
           path: |
-            plugin/mieru/src/main/jniLibs
-          key: ${{ hashFiles('.github/workflows/*', 'bin/lib/mieru/*', 'mieru_status') }}
+            plugin/mieru2/src/main/jniLibs
+          key: ${{ hashFiles('.github/workflows/*', 'bin/lib/mieru2/*', 'mieru2_status') }}
       - name: Gradle cache
         uses: actions/cache@v3
         with:
@@ -186,13 +186,13 @@ jobs:
       - name: Release Build
         env:
           SKIP_BUILD: on
-          BUILD_PLUGIN: mieru
+          BUILD_PLUGIN: mieru2
         run: |
           echo "sdk.dir=${ANDROID_HOME}" > local.properties
-          echo "ndk.dir=${ANDROID_HOME}/ndk/25.0.8775105" >> local.properties
+          echo "ndk.dir=${ANDROID_HOME}/ndk/25.2.9519653" >> local.properties
           export LOCAL_PROPERTIES="${{ secrets.LOCAL_PROPERTIES }}"
           cat > service_account_credentials.json << EOF
           ${{ secrets.ANDROID_PUBLISHER_CREDENTIALS }}"
           EOF
           ./run init action library
-          ./gradlew :plugin:mieru:publishPlayReleaseBundle
+          ./gradlew :plugin:mieru2:publishPlayReleaseBundle
