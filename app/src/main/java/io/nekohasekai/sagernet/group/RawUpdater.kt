@@ -819,6 +819,12 @@ object RawUpdater : GroupUpdater() {
                                             }
                                         }
                                     }
+                                    host?.also {
+                                        if (it.isNotEmpty()) {
+                                            // Xray's disgusting handling of Host header
+                                            v2rayBean.host = it
+                                        }
+                                    }
                                     maxEarlyData?.also {
                                         v2rayBean.wsMaxEarlyData = it
                                     }
@@ -876,8 +882,18 @@ object RawUpdater : GroupUpdater() {
                             }
                             "httpupgrade" -> {
                                 httpupgradeSettings?.apply {
+                                    headers?.forEach { (key, value) ->
+                                        when (key.lowercase()) {
+                                            "host" -> {
+                                                // Xray's disgusting handling of Host header
+                                                v2rayBean.host = value
+                                            }
+                                        }
+                                    }
                                     host?.also {
-                                        v2rayBean.host = it
+                                        if (it.isNotEmpty()) {
+                                            v2rayBean.host = it
+                                        }
                                     }
                                     path?.also {
                                         v2rayBean.path = it
@@ -914,8 +930,18 @@ object RawUpdater : GroupUpdater() {
                                 v2rayBean.type = "splithttp"
                                 val settings = splithttpSettings ?: xhttpSettings
                                 settings?.apply {
+                                    headers?.forEach { (key, value) ->
+                                        when (key.lowercase()) {
+                                            "host" -> {
+                                                // Xray's disgusting handling of Host header
+                                                v2rayBean.host = value
+                                            }
+                                        }
+                                    }
                                     host?.also {
-                                        v2rayBean.host = it
+                                        if (it.isNotEmpty()) {
+                                            v2rayBean.host = it
+                                        }
                                     }
                                     path?.also {
                                         v2rayBean.path = it
