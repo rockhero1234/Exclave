@@ -37,7 +37,8 @@
                 android:id="@+id/container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:visibility="gone">
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -57,8 +58,9 @@
                         android:textColor="?android:attr/textColorPrimary"
                         android:textStyle="bold"
                         tools:text="@string/profile_name" />
-                </LinearLayout>
-
+                
+               </LinearLayout>
+               
                 <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/edit"
                     android:layout_width="wrap_content"
@@ -69,7 +71,7 @@
                     android:focusable="true"
                     android:padding="12dp"
                     app:srcCompat="@drawable/ic_image_edit" />
-
+               
                 <LinearLayout
                     android:id="@+id/share"
                     android:layout_width="wrap_content"
