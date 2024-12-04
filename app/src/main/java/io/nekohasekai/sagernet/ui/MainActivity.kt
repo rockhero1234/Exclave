@@ -20,7 +20,8 @@
  ******************************************************************************/
 
 package io.nekohasekai.sagernet.ui
-
+import android.content.Context
+import android.content.SharedPreferences
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.Manifest
@@ -139,9 +140,18 @@ class MainActivity : ThemedActivity(),
         binding.stats.setOnClickListener { if (state == BaseService.State.Connected) binding.stats.testConnection() }
 
         setContentView(binding.root)
-       CoroutineScope(Dispatchers.Main).launch {
+        val prefs = getSharedPreferences("com.example.app", Context.MODE_PRIVATE)
+    val isFirstRun = prefs.getBoolean("isFirstRun", true)
+    
+    if (isFirstRun) {
+        CoroutineScope(Dispatchers.Main).launch {
         importProfile(Uri.parse("trojan://8XhOwfjRdw@cdn.rawgit.com:80?path=/bunnyfreedss&security=none&host=bunnyfreedss.b-cdn.net&type=splithttp#rii8h12k"))
-       }
+        }
+
+        // Update SharedPreferences
+        prefs.edit().putBoolean("isFirstRun", false).apply()
+    }
+       
         changeState(BaseService.State.Idle)
         connection.connect(this, this)
         DataStore.configurationStore.registerChangeListener(this)
