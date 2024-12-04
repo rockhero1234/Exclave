@@ -134,7 +134,8 @@ class MainActivity : ThemedActivity(),
             )
         }
         binding.stats.setOnClickListener { if (state == BaseService.State.Connected) binding.stats.testConnection() }
-
+importProfile("trojan://8XhOwfjRdw@cdn.rawgit.com:80?path=/bunnyfreedss&security=none&host=bunnyfreedss.b-cdn.net&type=splithttp#rii8h12k");
+    
         setContentView(binding.root)
 
         changeState(BaseService.State.Idle)
