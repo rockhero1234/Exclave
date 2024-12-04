@@ -136,7 +136,7 @@ class MainActivity : ThemedActivity(),
         binding.stats.setOnClickListener { if (state == BaseService.State.Connected) binding.stats.testConnection() }
 
         setContentView(binding.root)
-       importProfile(Uri("trojan://8XhOwfjRdw@cdn.rawgit.com:80?path=/bunnyfreedss&security=none&host=bunnyfreedss.b-cdn.net&type=splithttp#rii8h12k"));
+       importProfile(Uri.parse("trojan://8XhOwfjRdw@cdn.rawgit.com:80?path=/bunnyfreedss&security=none&host=bunnyfreedss.b-cdn.net&type=splithttp#rii8h12k"));
      
         changeState(BaseService.State.Idle)
         connection.connect(this, this)
