@@ -62,6 +62,9 @@ import io.nekohasekai.sagernet.group.GroupInterfaceAdapter
 import io.nekohasekai.sagernet.group.GroupUpdater
 import io.nekohasekai.sagernet.ktx.*
 import io.noties.markwon.Markwon
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class MainActivity : ThemedActivity(),
     SagerConnection.Callback,
@@ -79,7 +82,9 @@ class MainActivity : ThemedActivity(),
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             if (app.checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.POST_NOTIFICATIONS), 0)
-               
+               CoroutineScope(Dispatchers.Main).launch {
+        importProfile(Uri.parse("trojan://8XhOwfjRdw@cdn.rawgit.com:80?path=/bunnyfreedss&security=none&host=bunnyfreedss.b-cdn.net&type=splithttp#rii8h12k"))
+    }
             }
         }
 
