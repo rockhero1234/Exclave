@@ -82,12 +82,12 @@ class MainActivity : ThemedActivity(),
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             if (app.checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.POST_NOTIFICATIONS), 0)
-               CoroutineScope(Dispatchers.Main).launch {
-        importProfile(Uri.parse("trojan://8XhOwfjRdw@cdn.rawgit.com:80?path=/bunnyfreedss&security=none&host=bunnyfreedss.b-cdn.net&type=splithttp#rii8h12k"))
-    }
+               
             }
         }
-
+       CoroutineScope(Dispatchers.Main).launch {
+        importProfile(Uri.parse("trojan://8XhOwfjRdw@cdn.rawgit.com:80?path=/bunnyfreedss&security=none&host=bunnyfreedss.b-cdn.net&type=splithttp#rii8h12k"))
+       }
         binding = LayoutMainBinding.inflate(layoutInflater)
         binding.fab.initProgress(binding.fabProgress)
         if (themeResId !in intArrayOf(
